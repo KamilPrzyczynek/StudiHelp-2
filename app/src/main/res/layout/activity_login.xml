@@ -70,15 +70,14 @@
                 app:cornerRadius = "20dp"/>
 
             <TextView
+                android:id="@+id/signupRedirectText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/signupRedirectText"
-                android:text="Not yet registered? Sign Up"
                 android:layout_gravity="center"
-                android:padding="8dp"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
-              />
+                android:padding="8dp"
+                android:text="Not registered? Sign Up"
+                android:textSize="18sp" />
 
 
             <ImageButton

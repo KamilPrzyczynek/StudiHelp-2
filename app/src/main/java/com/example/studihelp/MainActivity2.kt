@@ -41,7 +41,6 @@ class MainActivity2 : AppCompatActivity() {
         }
         binding.appBarMain.fab.visibility = View.GONE
 
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -80,10 +79,8 @@ class MainActivity2 : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_activity2, menu)
-
         return true
     }
 

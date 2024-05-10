@@ -31,7 +31,6 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Save current activity title so we can set it again after a configuration change
         outState.putCharSequence(TITLE_TAG, title)
     }
 
@@ -46,7 +45,6 @@ class SettingsActivity : AppCompatActivity(),
         caller: PreferenceFragmentCompat,
         pref: Preference
     ): Boolean {
-        // Instantiate the new Fragment
         val args = pref.extras
         val fragment = pref.fragment?.let {
             supportFragmentManager.fragmentFactory.instantiate(
@@ -57,7 +55,6 @@ class SettingsActivity : AppCompatActivity(),
                 setTargetFragment(caller, 0)
             }
         }
-        // Replace the existing Fragment with the new Fragment
         if (fragment != null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.settings, fragment)
@@ -67,11 +64,6 @@ class SettingsActivity : AppCompatActivity(),
         title = pref.title
         return true
     }
-
-
-
-
-
 
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

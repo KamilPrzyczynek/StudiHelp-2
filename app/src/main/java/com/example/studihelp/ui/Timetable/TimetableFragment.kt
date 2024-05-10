@@ -1,4 +1,3 @@
-// TimetableFragment.kt
 package com.example.studihelp.ui.Timetable
 
 import android.app.AlertDialog
@@ -72,7 +71,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle Firebase data retrieval error
+
             }
         })
     }
@@ -102,7 +101,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
                 val room = roomEditText.text.toString()
                 val startTime = startTimeButton.text.toString()
                 val endTime = endTimeButton.text.toString()
-                val dayOfWeek = dayOfWeekSpinner.selectedItemPosition + 1 // +1 because the day of the week starts from 1
+                val dayOfWeek = dayOfWeekSpinner.selectedItemPosition + 1
                 val color = colorSpinner.selectedItem.toString()
 
                 val username = sharedPreferences.getString("username", null)
@@ -117,13 +116,12 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             }
         builder.show()
 
-        // Handle selection of start time
+
         val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetable)
         startTimeButton.setOnClickListener {
             showTimePickerDialog(startTimeButton)
         }
 
-        // Handle selection of end time
         val endTimeButton = dialogView.findViewById<Button>(R.id.endTimeButtonTimetable)
         endTimeButton.setOnClickListener {
             showTimePickerDialog(endTimeButton)
@@ -136,7 +134,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             "Red" -> R.color.red
             "Blue" -> R.color.blue
             "Green" -> R.color.green
-            else -> R.color.black // Default color if none of the above matches
+            else -> R.color.black
         }
     }
 
@@ -186,13 +184,13 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         val dayOfWeekSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinnerEdit)
         val colorSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinnerEdit)
 
-        // Populate dialog fields with current item values
+
         nameEditText.setText(item.name)
         roomEditText.setText(item.room)
         startTimeButton.text = item.startTime
         endTimeButton.text = item.endTime
-        dayOfWeekSpinner.setSelection(item.dayOfWeek - 1) // Subtract 1 to match array index
-        colorSpinner.setSelection(getColorIndex(item.color)) // Get index of color in array
+        dayOfWeekSpinner.setSelection(item.dayOfWeek - 1)
+        colorSpinner.setSelection(getColorIndex(item.color))
 
         AlertDialog.Builder(requireContext())
             .setView(dialogView)

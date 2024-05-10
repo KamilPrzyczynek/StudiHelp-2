@@ -23,9 +23,9 @@ class EditProfilActivity : AppCompatActivity() {
     var editPassword:EditText? = null
     var saveButton: Button? = null
     var nameUser: String? = null
-    var emailUser:kotlin.String? = null
-    var usernameUser:kotlin.String? = null
-    var passwordUser:kotlin.String? = null
+    var emailUser:String? = null
+    var usernameUser:String? = null
+    var passwordUser:String? = null
     var reference: DatabaseReference? = null
     private lateinit var backtohomeText: TextView
 

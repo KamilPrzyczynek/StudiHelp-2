@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editHealthTypeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter type of health entry"
+        android:inputType="text"
+        android:layout_marginTop="8dp"
+        />
+
+    <EditText
+        android:id="@+id/editHealthDurationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter duration"
+        android:inputType="text"
+        android:layout_below="@id/editHealthTypeEditText"
+        android:layout_marginTop="8dp"
+        />
+
+    <EditText
+        android:id="@+id/editHealthDateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter date"
+        android:inputType="text"
+        android:layout_below="@id/editHealthDurationEditText"
+        android:layout_marginTop="8dp"
+        />
+
+    <EditText
+        android:id="@+id/editHealthNotesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a note:"
+        android:layout_below="@id/editHealthDateEditText"
+        android:layout_marginTop="8dp"
+        />
+
+</RelativeLayout>

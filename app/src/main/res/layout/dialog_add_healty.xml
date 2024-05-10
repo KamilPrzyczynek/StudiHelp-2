@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/healthTypeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Enter type of health entry"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/healthDurationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/healthTypeEditText"
+        android:layout_marginTop="8dp"
+        android:hint="Enter duration"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/healthDateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/healthDurationEditText"
+        android:layout_marginTop="8dp"
+        android:hint="Enter date"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/healthNotesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/healthDateEditText"
+        android:layout_marginTop="8dp"
+        android:hint="Enter notes"
+        android:inputType="text"/>
+
+</RelativeLayout>

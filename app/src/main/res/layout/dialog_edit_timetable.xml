@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/nameEditTextTimetableEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name" />
+
+    <EditText
+        android:id="@+id/roomEditTextTimetableEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Room" />
+
+    <Button
+        android:id="@+id/startTimeButtonTimetableEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Start Time" />
+
+    <Button
+        android:id="@+id/endTimeButtonTimetableEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select End Time" />
+
+    <Spinner
+        android:id="@+id/dayOfWeekSpinnerEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/select_day_of_week_prompt" />
+
+    <Spinner
+        android:id="@+id/ColorSpinnerEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/select_day_of_week_prompt" />
+</LinearLayout>

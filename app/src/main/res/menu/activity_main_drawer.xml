@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/baseline_home_24"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/baseline_monitor_heart_24"
+            android:title="@string/menu_gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/baseline_edit_note_24"
+            android:title="@string/menu_slideshow" />
+        <item
+            android:id="@+id/nav_expenditure"
+            android:icon="@drawable/baseline_attach_money_24"
+            android:title="@string/menu_expenditure" />
+
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/baseline_calendar_view_week_24"
+            android:title="@string/menu_timetable" />
+        <item
+            android:id="@+id/nav_task"
+            android:icon="@drawable/baseline_dataset_24"
+            android:title="@string/menu_task" />
+
+        <item
+            android:id="@+id/nav_aboutus"
+            android:icon="@drawable/baseline_info_24"
+            android:title="@string/menu_aboutus" />
+
+
+    </group>
+</menu>

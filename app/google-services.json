@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "604448138533",
+    "project_id": "studihelp-93aa0",
+    "storage_bucket": "studihelp-93aa0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604448138533:android:a6f761b3606d28d4e9e6cc",
+        "android_client_info": {
+          "package_name": "com.example.studihelp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604448138533-a94e47rfe0nvdk0ila8uuvi4d5dtv7qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB26VYHwudJ4Jy1l4m_aLDSFlblt6-OI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604448138533-a94e47rfe0nvdk0ila8uuvi4d5dtv7qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -87,15 +87,13 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
                 val roomEditText = dialogView.findViewById<EditText>(R.id.roomEditTextTimetable)
                 val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetable)
                 val endTimeButton = dialogView.findViewById<Button>(R.id.endTimeButtonTimetable)
-                val dayOfWeekSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinner)
-                val colorSpinner = dialogView.findViewById<Spinner>(R.id.colorSpinner)
 
-                // Set adapter for dayOfWeekSpinner
+                val dayOfWeekSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinner)
                 val dayOfWeekAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.days_of_week_array, android.R.layout.simple_spinner_item)
                 dayOfWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 dayOfWeekSpinner.adapter = dayOfWeekAdapter
 
-                // Set adapter for colorSpinner
+                val colorSpinner = dialogView.findViewById<Spinner>(R.id.colorSpinner)
                 val colorAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.color_array, android.R.layout.simple_spinner_item)
                 colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 colorSpinner.adapter = colorAdapter
@@ -131,6 +129,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             showTimePickerDialog(endTimeButton)
         }
     }
+
 
     private fun getColorInt(colorName: String): Int {
         return when (colorName) {

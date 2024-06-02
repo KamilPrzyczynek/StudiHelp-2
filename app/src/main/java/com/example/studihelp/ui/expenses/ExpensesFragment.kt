@@ -171,6 +171,6 @@ class ExpensesFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "ExpensesFragment"
+        const val TAG = "ExpensesFragment"
     }
 }

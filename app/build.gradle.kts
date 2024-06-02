@@ -57,9 +57,15 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.google.android.libraries.places:places:3.5.0")
     androidTestImplementation(libs.androidx.espresso.core)
+
+
 
 
 }

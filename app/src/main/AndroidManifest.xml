@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +22,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudiHelp"
         tools:targetApi="33">
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="com.example.studihelp.mycontentprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:protectionLevel="signature"
+            android:directBootAware="true" />
+
         <activity
             android:name=".ui.Timetable.Timetable"
             android:exported="false"
@@ -34,7 +44,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,5 +63,4 @@
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.StudiHelp.NoActionBar" />
     </application>
-
 </manifest>

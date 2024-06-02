@@ -29,15 +29,15 @@
         android:layout_height="wrap_content"
         android:text="Select End Time" />
 
-    <Spinner
-        android:id="@+id/dayOfWeekSpinnerEdit"
+    <Button
+        android:id="@+id/dayOfWeekButtonEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/select_day_of_week_prompt" />
+        android:text="Select Day of Week" />
 
-    <Spinner
-        android:id="@+id/ColorSpinnerEdit"
+    <Button
+        android:id="@+id/colorButtonEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/select_day_of_week_prompt" />
+        android:text="Select Color" />
 </LinearLayout>

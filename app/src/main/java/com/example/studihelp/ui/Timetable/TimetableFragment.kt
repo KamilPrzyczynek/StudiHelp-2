@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
@@ -21,8 +24,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import android.widget.ArrayAdapter
-
+import android.content.DialogInterface
 
 class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     private lateinit var recyclerView: RecyclerView
@@ -71,7 +73,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                Log.e("TimetableFragment", "Error fetching data from Firebase: ${error.message}")
             }
         })
     }
@@ -81,41 +83,54 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         val builder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Add Timetable Item")
-            .setPositiveButton("Add") { dialog, _ ->
-                val nameEditText = dialogView.findViewById<EditText>(R.id.nameEditTextTimetable)
-                val roomEditText = dialogView.findViewById<EditText>(R.id.roomEditTextTimetable)
-                val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetable)
-                val endTimeButton = dialogView.findViewById<Button>(R.id.endTimeButtonTimetable)
-
-                val dayOfWeekSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinner)
-                val dayOfWeekAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.days_of_week_array, android.R.layout.simple_spinner_item)
-                dayOfWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                dayOfWeekSpinner.adapter = dayOfWeekAdapter
-
-                val colorSpinner = dialogView.findViewById<Spinner>(R.id.colorSpinner)
-                val colorAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.color_array, android.R.layout.simple_spinner_item)
-                colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                colorSpinner.adapter = colorAdapter
-
-                val name = nameEditText.text.toString()
-                val room = roomEditText.text.toString()
-                val startTime = startTimeButton.text.toString()
-                val endTime = endTimeButton.text.toString()
-                val dayOfWeek = dayOfWeekSpinner.selectedItemPosition + 1
-                val color = colorSpinner.selectedItem.toString()
-
-                val username = sharedPreferences.getString("username", null)
-                val taskRef = database.child("users").child(username!!).child("Timetable").push()
-                val timetableItem = TimetableItem(taskRef.key!!, name, room, startTime, endTime, dayOfWeek, getColorInt(color))
-                taskRef.setValue(timetableItem)
-
-                dialog.dismiss()
+            .setPositiveButton("Add") { dialog, _ -> // Do not dismiss dialog here
+                // This will be overridden below to ensure fields are filled
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-        builder.show()
+        val alertDialog = builder.create()
+        alertDialog.show()
 
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val nameEditText = dialogView.findViewById<EditText>(R.id.nameEditTextTimetable)
+            val roomEditText = dialogView.findViewById<EditText>(R.id.roomEditTextTimetable)
+            val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetable)
+            val endTimeButton = dialogView.findViewById<Button>(R.id.endTimeButtonTimetable)
+            val dayOfWeekButton = dialogView.findViewById<Button>(R.id.dayOfWeekButton)
+            val colorButton = dialogView.findViewById<Button>(R.id.colorButton)
+
+            val name = nameEditText.text.toString()
+            val room = roomEditText.text.toString()
+            val startTime = startTimeButton.text.toString()
+            val endTime = endTimeButton.text.toString()
+            val dayOfWeek = dayOfWeekButton.text.toString()
+            val color = colorButton.text.toString()
+
+            if (name.isEmpty() || room.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || dayOfWeek.isEmpty() || color.isEmpty()) {
+                // Show error message if any field is empty
+                // You can customize this message as needed
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            } else {
+                // All fields are filled, proceed with adding timetable item
+                val username = sharedPreferences.getString("username", null)
+                val taskRef = database.child("users").child(username!!).child("Timetable").push()
+                val timetableItem = TimetableItem(taskRef.key!!, name, room, startTime, endTime, dayOfWeek, color)
+
+                taskRef.setValue(timetableItem)
+                alertDialog.dismiss() // Dismiss dialog only if all fields are filled
+            }
+        }
+
+        val dayOfWeekButton = dialogView.findViewById<Button>(R.id.dayOfWeekButton)
+        dayOfWeekButton.setOnClickListener {
+            showDayPickerDialog(dayOfWeekButton)
+        }
+
+        val colorButton = dialogView.findViewById<Button>(R.id.colorButton)
+        colorButton.setOnClickListener {
+            showColorPickerDialog(colorButton)
+        }
 
         val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetable)
         startTimeButton.setOnClickListener {
@@ -129,14 +144,54 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     }
 
 
-    private fun getColorInt(colorName: String): Int {
-        return when (colorName) {
-            "Red" -> R.color.red
-            "Blue" -> R.color.blue
-            "Green" -> R.color.green
-            else -> R.color.black
+
+    private fun showOptionsDialog(options: Array<String>, onOptionSelected: (String) -> Unit) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Choose an option")
+            .setItems(options) { _, which ->
+                onOptionSelected(options[which])
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    private fun showDayPickerDialog(dayOfWeekButton: Button) {
+        val calendar = Calendar.getInstance()
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        val daysOfWeek = resources.getStringArray(R.array.days_of_week_array)
+
+        val dayPickerDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Select Day of Week")
+            .setSingleChoiceItems(daysOfWeek, dayOfWeek - 1) { dialog, which ->
+                dayOfWeekButton.text = daysOfWeek[which]
+                dialog.dismiss()
+            }
+            .create()
+
+        dayPickerDialog.show()
+    }
+
+    private fun showColorPickerDialog(colorButton: Button) {
+        val colors = resources.getStringArray(R.array.color_array)
+
+        val colorPickerDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Select Color")
+            .setSingleChoiceItems(colors, -1) { dialog, which ->
+                colorButton.text = colors[which]
+                dialog.dismiss()
+            }
+            .create()
+
+        colorPickerDialog.show()
+    }
+    private fun getColorName(color: Int): String {
+        return when (color) {
+            R.color.red -> "Red"
+            R.color.blue -> "Blue"
+            R.color.green -> "Green"
+            else -> "Black"
         }
     }
+
 
     private fun showTimePickerDialog(button: Button) {
         val currentTime = System.currentTimeMillis()
@@ -155,13 +210,11 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         timePickerDialog.show()
     }
 
-
-
-
     override fun onItemClick(position: Int) {
         val item = timetableList[position]
         showEditDeleteDialog(item)
     }
+
     private fun showEditDeleteDialog(item: TimetableItem) {
         val options = arrayOf("Edit", "Delete")
         AlertDialog.Builder(requireContext())
@@ -181,18 +234,17 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         val roomEditText = dialogView.findViewById<EditText>(R.id.roomEditTextTimetableEdit)
         val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetableEdit)
         val endTimeButton = dialogView.findViewById<Button>(R.id.endTimeButtonTimetableEdit)
-        val dayOfWeekSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinnerEdit)
-        val colorSpinner = dialogView.findViewById<Spinner>(R.id.dayOfWeekSpinnerEdit)
-
+        val dayOfWeekButtonEdit = dialogView.findViewById<Button>(R.id.dayOfWeekButtonEdit)
+        val colorButtonEdit = dialogView.findViewById<Button>(R.id.colorButtonEdit)
 
         nameEditText.setText(item.name)
         roomEditText.setText(item.room)
         startTimeButton.text = item.startTime
         endTimeButton.text = item.endTime
-        dayOfWeekSpinner.setSelection(item.dayOfWeek - 1)
-        colorSpinner.setSelection(getColorIndex(item.color))
+        dayOfWeekButtonEdit.text = item.dayOfWeek
+        colorButtonEdit.text = item.color
 
-        AlertDialog.Builder(requireContext())
+        val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Edit Timetable Item")
             .setPositiveButton("Save") { dialog, _ ->
@@ -200,10 +252,10 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
                 val room = roomEditText.text.toString()
                 val startTime = startTimeButton.text.toString()
                 val endTime = endTimeButton.text.toString()
-                val dayOfWeek = dayOfWeekSpinner.selectedItemPosition + 1
-                val color = colorSpinner.selectedItem.toString()
 
-                val updatedItem = TimetableItem(item.id, name, room, startTime, endTime, dayOfWeek, getColorInt(color))
+                val updatedItem = TimetableItem(item.id, name, room, startTime, endTime, dayOfWeekButtonEdit.text.toString(), colorButtonEdit.text.toString())
+
+
                 updateTimetableItem(updatedItem)
 
                 dialog.dismiss()
@@ -211,23 +263,32 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+            .create()
+
+        alertDialog.show()
+
+        dayOfWeekButtonEdit.setOnClickListener {
+            showDayPickerDialog(dayOfWeekButtonEdit)
+        }
+
+        colorButtonEdit.setOnClickListener {
+            showColorPickerDialog(colorButtonEdit)
+        }
+
+        startTimeButton.setOnClickListener {
+            showTimePickerDialog(startTimeButton)
+        }
+
+        endTimeButton.setOnClickListener {
+            showTimePickerDialog(endTimeButton)
+        }
     }
+
 
     private fun deleteTimetableItem(item: TimetableItem) {
         val username = sharedPreferences.getString("username", null)
         val taskRef = database.child("users").child(username!!).child("Timetable").child(item.id)
         taskRef.removeValue()
-    }
-
-    private fun getColorIndex(colorName: Int): Int {
-        val colorArray = resources.getStringArray(R.array.color_array)
-        for ((index, color) in colorArray.withIndex()) {
-            if (getColorInt(color) == colorName) {
-                return index
-            }
-        }
-        return -1
     }
 
 

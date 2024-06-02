@@ -6,6 +6,6 @@ data class TimetableItem(
     val room: String = "",
     val startTime: String = "",
     val endTime: String = "",
-    val dayOfWeek: Int = 0,
-    val color: Int = 0
+    val dayOfWeek: String = "",
+    val color: String="",
 )

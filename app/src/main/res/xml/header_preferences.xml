@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
         app:fragment="com.example.studihelp.SettingsActivity$MessagesFragment"
@@ -11,5 +12,14 @@
         app:icon="@drawable/sync"
         app:key="sync_header"
         app:title="@string/sync_header" />
+
+    <SwitchPreferenceCompat
+        app:key="dark_mode"
+        app:title="@string/dark_mode"
+        app:summaryOn="@string/dark_mode_summary_on"
+        app:summaryOff="@string/dark_mode_summary_off"
+        app:icon="@drawable/baseline_dark_mode_24"
+        android:textColor="@color/dark_mode_text_color"
+        app:defaultValue="false" />
 
 </PreferenceScreen>

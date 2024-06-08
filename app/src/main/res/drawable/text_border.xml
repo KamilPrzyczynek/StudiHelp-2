@@ -3,7 +3,7 @@
     android:shape="rectangle">
         <stroke
             android:width="2dp"
-android:color="@color/common_google_signin_btn_text_dark"
+android:color="@color/white"
         />
     <corners
         android:radius="30dp"></corners>

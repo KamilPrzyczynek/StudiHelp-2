@@ -1,11 +1,13 @@
 package com.example.studihelp.ui.gallery
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.Calendar
 
 class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
@@ -56,7 +59,7 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_healty, null)
         val typeEditText = dialogView.findViewById<EditText>(R.id.healthTypeEditText)
         val durationEditText = dialogView.findViewById<EditText>(R.id.healthDurationEditText)
-        val dateEditText = dialogView.findViewById<EditText>(R.id.healthDateEditText)
+        val dateButton = dialogView.findViewById<Button>(R.id.healthDateButton) // Znajdź przycisk
         val notesEditText = dialogView.findViewById<EditText>(R.id.healthNotesEditText)
 
         val builder = AlertDialog.Builder(requireContext())
@@ -65,11 +68,11 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             .setPositiveButton("Add") { dialog, _ ->
                 val type = typeEditText.text.toString().trim()
                 val duration = durationEditText.text.toString().trim()
-                val date = dateEditText.text.toString().trim()
-                val notes = notesEditText.text.toString().trim() // Upewnij się, że pobierasz wartość notatek z pola EditText
+                val date = dateButton.text.toString().trim() // Pobierz wybraną datę z tekstu przycisku
+                val notes = notesEditText.text.toString().trim()
 
                 if (type.isNotEmpty() && duration.isNotEmpty() && date.isNotEmpty()) {
-                    addHealthEntryToDatabase(type, duration, date, notes) // Przekazujesz notatki do funkcji addHealthEntryToDatabase
+                    addHealthEntryToDatabase(type, duration, date, notes)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(requireContext(), "Please enter type, duration, and date", Toast.LENGTH_SHORT).show()
@@ -78,6 +81,15 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
+            val selectedDate = "$year-${month + 1}-$day"
+            dateButton.text = selectedDate // Ustaw wybraną datę w tekście przycisku
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+
+        dateButton.setOnClickListener {
+            datePickerDialog.show() // Pokaż dialog wyboru daty po kliknięciu przycisku
+        }
 
         builder.create().show()
     }
@@ -119,15 +131,10 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                     val date = entrySnapshot.child("date").getValue(String::class.java)
                     val notes = entrySnapshot.child("notes").getValue(String::class.java)
 
-                    type?.let { t ->
-                        duration?.let { d ->
-                            date?.let { dt ->
-                                notes?.let { n ->
-                                    val healthEntry = HealthEntry(t, d, dt, n)
-                                    healthEntries.add(healthEntry)
-                                }
-                            }
-                        }
+                    // Sprawdzenie, czy wszystkie dane są dostępne
+                    if (!type.isNullOrEmpty() && !duration.isNullOrEmpty() && !date.isNullOrEmpty() && !notes.isNullOrEmpty()) {
+                        val healthEntry = HealthEntry(entrySnapshot.key!!, type, duration, date, notes)
+                        healthEntries.add(healthEntry)
                     }
                 }
 
@@ -139,6 +146,7 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             }
         })
     }
+
 
     override fun onHealthEntryClick(healthEntry: HealthEntry) {
         val options = arrayOf("Edit", "Delete")
@@ -157,12 +165,12 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_healty, null)
         val typeEditText = dialogView.findViewById<EditText>(R.id.editHealthTypeEditText)
         val durationEditText = dialogView.findViewById<EditText>(R.id.editHealthDurationEditText)
-        val dateEditText = dialogView.findViewById<EditText>(R.id.editHealthDateEditText)
+        val dateButton = dialogView.findViewById<Button>(R.id.editHealthDateButton) // Znajdź przycisk
         val notesEditText = dialogView.findViewById<EditText>(R.id.editHealthNotesEditText)
 
         typeEditText.setText(healthEntry.type)
         durationEditText.setText(healthEntry.duration)
-        dateEditText.setText(healthEntry.date)
+        dateButton.text = healthEntry.date // Ustaw wybraną datę w tekście przycisku
         notesEditText.setText(healthEntry.notes)
 
         val builder = AlertDialog.Builder(requireContext())
@@ -171,11 +179,10 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             .setPositiveButton("Save") { dialog, _ ->
                 val type = typeEditText.text.toString().trim()
                 val duration = durationEditText.text.toString().trim()
-                val date = dateEditText.text.toString().trim()
+                val date = dateButton.text.toString().trim() // Pobierz wybraną datę z tekstu przycisku
                 val notes = notesEditText.text.toString().trim()
 
                 if (type.isNotEmpty() && duration.isNotEmpty() && date.isNotEmpty()) {
-                    // Aktualizuj wpis zdrowotny w bazie danych
                     updateHealthEntryInDatabase(healthEntry, type, duration, date, notes)
                     dialog.dismiss()
                 } else {
@@ -185,6 +192,15 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
+            val selectedDate = "$year-${month + 1}-$day"
+            dateButton.text = selectedDate // Ustaw wybraną datę w tekście przycisku
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+
+        dateButton.setOnClickListener {
+            datePickerDialog.show() // Pokaż dialog wyboru daty po kliknięciu przycisku
+        }
 
         builder.create().show()
     }

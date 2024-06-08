@@ -9,6 +9,7 @@ android:layout_height="match_parent">
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/tasksRecyclerView"
     android:layout_width="match_parent"
+    android:background="@drawable/text_borderhome"
     android:layout_height="0dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 

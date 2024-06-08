@@ -8,12 +8,14 @@
     android:orientation="vertical">
 
     <ImageView
+        android:background="@drawable/text_borderhome"
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_akademia_nauk" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:background="@drawable/text_borderhome"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

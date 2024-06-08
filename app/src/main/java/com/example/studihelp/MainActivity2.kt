@@ -15,6 +15,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 import com.example.studihelp.databinding.ActivityMain2Binding
 import com.example.studihelp.ui.login.EditProfilActivity
 import com.example.studihelp.ui.login.LoginActivity

@@ -145,5 +145,10 @@
     <string name="colorSelectSpinner">Collor select:</string>
     <string name="menu_drive">Drive</string>
     <string name="google_places_api_key">AIzaSyB26VYHwudJ4Jy1l4m_aLDSFlblt6-OI98</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="dark_mode_summary_on">On</string>
+    <string name="dark_mode_summary_off">Off</string>
+    <color name="dark_mode_text_color">#FFFFFF</color>
+    <color name="light_mode_text_color">#000000</color>
 
 </resources>

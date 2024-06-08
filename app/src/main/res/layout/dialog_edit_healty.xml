@@ -23,22 +23,21 @@
         android:layout_marginTop="8dp"
         />
 
-    <EditText
-        android:id="@+id/editHealthDateEditText"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/editHealthDateButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter date"
-        android:inputType="text"
+        android:text="Select Date"
         android:layout_below="@id/editHealthDurationEditText"
-        android:layout_marginTop="8dp"
-        />
+        android:layout_marginTop="8dp"/>
+
 
     <EditText
         android:id="@+id/editHealthNotesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter a note:"
-        android:layout_below="@id/editHealthDateEditText"
+        android:layout_below="@id/editHealthDateButton"
         android:layout_marginTop="8dp"
         />
 

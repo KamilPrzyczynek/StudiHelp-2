@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
 
 
-class TimetableAdapter(private val listener: OnItemClickListener) : ListAdapter<TimetableItem, RecyclerView.ViewHolder>(TimetableDiffCallback()) {
+class TimetableAdapter(private val listener: OnItemClickListener) :
+    ListAdapter<TimetableItem, RecyclerView.ViewHolder>(TimetableDiffCallback()) {
 
     companion object {
         const val VIEW_TYPE_HEADER = 0
@@ -20,10 +21,12 @@ class TimetableAdapter(private val listener: OnItemClickListener) : ListAdapter<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_HEADER) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_timetable_header, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_timetable_header, parent, false)
             HeaderViewHolder(view)
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_timetable_data, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_timetable_data, parent, false)
             DataViewHolder(view)
         }
     }
@@ -56,7 +59,8 @@ class TimetableAdapter(private val listener: OnItemClickListener) : ListAdapter<
         }
     }
 
-    inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         private val roomTextView: TextView = itemView.findViewById(R.id.roomTextView)
         private val timeTextView: TextView = itemView.findViewById(R.id.timeTextView)

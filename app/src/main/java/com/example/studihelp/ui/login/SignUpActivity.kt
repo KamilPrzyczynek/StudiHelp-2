@@ -16,9 +16,9 @@ import com.google.firebase.database.FirebaseDatabase
 class SignUpActivity : AppCompatActivity() {
 
     var signupName: EditText? = null
-    var signupEmail:EditText? = null
-    var signupUsername:EditText? = null
-    var signupPassword:EditText? = null
+    var signupEmail: EditText? = null
+    var signupUsername: EditText? = null
+    var signupPassword: EditText? = null
     var loginRedirectText: TextView? = null
     var signupButton: Button? = null
     var database: FirebaseDatabase? = null

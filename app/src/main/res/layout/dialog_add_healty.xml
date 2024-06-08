@@ -19,7 +19,7 @@
         android:layout_below="@id/healthTypeButton"
         android:layout_marginTop="8dp"
         android:hint="Enter duration"
-        android:inputType="text"/>
+        android:inputType="text" />
 
     <Button
         android:id="@+id/healthDateButton"
@@ -29,7 +29,7 @@
         style="@style/DarkModeButtonStyle"
         android:background="@drawable/button_background"
         android:layout_below="@id/healthDurationEditText"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
 
 
     <EditText
@@ -39,6 +39,6 @@
         android:layout_below="@id/healthDateButton"
         android:layout_marginTop="8dp"
         android:hint="Enter notes"
-        android:inputType="text"/>
+        android:inputType="text" />
 
 </RelativeLayout>

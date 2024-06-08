@@ -61,11 +61,9 @@ dependencies {
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    implementation ("com.squareup.picasso:picasso:2.71828")
-    implementation ("com.google.android.libraries.places:places:3.5.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.google.android.libraries.places:places:3.5.0")
     androidTestImplementation(libs.androidx.espresso.core)
-
-
 
 
 }

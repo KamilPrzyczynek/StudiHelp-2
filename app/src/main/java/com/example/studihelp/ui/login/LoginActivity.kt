@@ -97,8 +97,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun validateUsername(): Boolean {
         val username = loginUsername.text.toString()
         return if (username.isEmpty()) {
@@ -131,12 +129,16 @@ class LoginActivity : AppCompatActivity() {
         checkUserDatabase.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val passwordFromDB = snapshot.child(userUsername).child("password").getValue(String::class.java)
+                    val passwordFromDB =
+                        snapshot.child(userUsername).child("password").getValue(String::class.java)
                     if (passwordFromDB == userPassword) {
 
-                        val nameFromDB = snapshot.child(userUsername).child("name").getValue(String::class.java)
-                        val emailFromDB = snapshot.child(userUsername).child("email").getValue(String::class.java)
-                        val usernameFromDB = snapshot.child(userUsername).child("username").getValue(String::class.java)
+                        val nameFromDB =
+                            snapshot.child(userUsername).child("name").getValue(String::class.java)
+                        val emailFromDB =
+                            snapshot.child(userUsername).child("email").getValue(String::class.java)
+                        val usernameFromDB = snapshot.child(userUsername).child("username")
+                            .getValue(String::class.java)
 
 
                         saveLoginData(userUsername, userPassword)

@@ -11,20 +11,20 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="4dp" />
 
     <TextView
         android:id="@+id/textViewContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textViewTimestamp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="10sp"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp" />
 
 
     <ImageView
@@ -33,6 +33,6 @@
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_location_pin_24"
         android:layout_gravity="end"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </LinearLayout>

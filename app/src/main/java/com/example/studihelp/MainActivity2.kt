@@ -1,7 +1,9 @@
 package com.example.studihelp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +25,7 @@ class MainActivity2 : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMain2Binding
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,8 @@ class MainActivity2 : AppCompatActivity() {
 
         }
         binding.appBarMain.fab.visibility = View.GONE
+
+        sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -58,7 +63,15 @@ class MainActivity2 : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        if (sharedPreferences.getBoolean("isLoggedIn", false)) {
+            Log.d("MainActivity2", "User is logged in")
+            navController.navigate(R.id.nav_home)
+        } else {
+            Log.d("MainActivity2", "User is not logged in")
+        }
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -76,11 +89,17 @@ class MainActivity2 : AppCompatActivity() {
             }
 
             R.id.action_logout -> {
+                Log.d("MainActivity2", "Logging out user")
+                val editor = sharedPreferences.edit()
+                editor.remove("username")
+                editor.remove("password")
+                editor.remove("isLoggedIn")
+                editor.apply()
 
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "You have been logged out. See you later", Toast.LENGTH_SHORT)
-                    .show()
+                finish()
+                Toast.makeText(this, "You have been logged out. See you later", Toast.LENGTH_SHORT).show()
                 return true
             }
 

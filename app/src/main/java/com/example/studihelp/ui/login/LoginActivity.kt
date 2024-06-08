@@ -91,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putString("username", username)
         editor.putString("password", password)
+        editor.putBoolean("isLoggedIn", true)
         editor.apply()
 
         Log.i("LoginActivity", "Saved username: $username, password: $password")
@@ -149,6 +150,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("username", usernameFromDB)
                         intent.putExtra("password", passwordFromDB)
                         startActivity(intent)
+                        finish()
                     } else {
                         loginPassword.error = "Invalid Credentials"
                         loginPassword.requestFocus()

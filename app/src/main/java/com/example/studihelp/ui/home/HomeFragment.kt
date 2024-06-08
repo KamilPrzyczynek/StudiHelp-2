@@ -1,6 +1,7 @@
 package com.example.studihelp.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.databinding.FragmentHomeBinding
 import com.example.studihelp.ui.Task.Task
 import com.example.studihelp.ui.Task.TaskAdapter
+import com.example.studihelp.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -53,6 +55,11 @@ class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         val root: View = binding.root
         sharedPreferences =
             requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        if (!sharedPreferences.getBoolean("isLoggedIn", false)) {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance().reference
 

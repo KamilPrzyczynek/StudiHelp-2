@@ -91,7 +91,7 @@ class ExpensesFragment : Fragment() {
 
                     expensesList.clear()
                     expensesList.addAll(expenseList)
-                    expensesAdapter.submitList(expenseList.toList()) // Submit a new list to the adapter
+                    expensesAdapter.submitList(expenseList.toList())
                     updateTotalExpenses()
 
                     isDataFetched = true
@@ -149,7 +149,7 @@ class ExpensesFragment : Fragment() {
                 .addOnSuccessListener {
                     Log.d(TAG, "Expense added to the database: $expenseName")
                     Toast.makeText(requireContext(), "Expense added.", Toast.LENGTH_SHORT).show()
-                    fetchExpensesFromDatabase() // Refresh data
+                    fetchExpensesFromDatabase()
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "Failed to add expense to the database: $expenseName", e)
@@ -231,7 +231,7 @@ class ExpensesFragment : Fragment() {
                         expenseSnapshot.ref.removeValue()
                     }
                     Log.d(TAG, "Expense deleted from the database: ${expense.name}")
-                    fetchExpensesFromDatabase() // Refresh data
+                    fetchExpensesFromDatabase()
                 }
 
                 override fun onCancelled(error: DatabaseError) {

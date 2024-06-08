@@ -32,6 +32,8 @@
         android:id="@+id/btnSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:text="Select Date" />
 
     <EditText
@@ -44,6 +46,8 @@
 
     <Button
         android:id="@+id/btnSelectTime"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Time" />

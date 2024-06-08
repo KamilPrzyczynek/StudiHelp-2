@@ -89,6 +89,8 @@
                 android:text="Sign Up"
                 android:id="@+id/signup_button"
                 android:textSize="18sp"
+                style="@style/DarkModeButtonStyle"
+                android:background="@drawable/button_background"
                 android:layout_marginTop="30dp"
                 app:cornerRadius = "20dp"/>
 

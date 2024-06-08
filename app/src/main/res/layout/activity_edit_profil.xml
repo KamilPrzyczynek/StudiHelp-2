@@ -91,6 +91,8 @@
                 android:id="@+id/saveButton"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
+                style="@style/DarkModeButtonStyle"
+                android:background="@drawable/button_background"
                 app:cornerRadius = "20dp"/>
 
             <TextView

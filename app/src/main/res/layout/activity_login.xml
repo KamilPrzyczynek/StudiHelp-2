@@ -64,6 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Login"
+                style="@style/DarkModeButtonStyle"
+                android:background="@drawable/button_background"
                 android:id="@+id/login_button"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"

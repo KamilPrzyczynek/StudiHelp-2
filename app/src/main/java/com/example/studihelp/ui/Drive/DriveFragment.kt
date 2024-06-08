@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 
 
 class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
@@ -42,7 +41,8 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_drive, container, false)
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         currentUserUsername = sharedPreferences.getString("username", "") ?: ""
 
         databaseReference = FirebaseDatabase.getInstance().reference
@@ -82,7 +82,8 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
     }
 
     private fun showAddDriveDialog(imageUri: Uri?) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_drive, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_drive, null)
         val topicEditText = dialogView.findViewById<EditText>(R.id.etDriveTopic)
         val ivSelectedImagePreview = dialogView.findViewById<ImageView>(R.id.ivSelectedImagePreview)
 
@@ -107,15 +108,25 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
                 if (topic.isNotEmpty()) {
                     val username = sharedPreferences.getString("username", null)
                     if (username != null) {
-                        val driveItemRef = databaseReference.child("users").child(username).child("drive").push()
-                        val driveItem = DriveItem(driveItemRef.key!!, topic, imageUri.toString()) // Zapis adresu URL obrazu
+                        val driveItemRef =
+                            databaseReference.child("users").child(username).child("drive").push()
+                        val driveItem = DriveItem(driveItemRef.key!!, topic, imageUri.toString())
                         driveItemRef.setValue(driveItem)
-                        Toast.makeText(requireContext(), "Drive item added successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Drive item added successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(requireContext(), "Failed to get username", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to get username",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Please enter topic", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Please enter topic", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 dialog.dismiss()
             }
@@ -126,7 +137,8 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
     }
 
     private fun showEditDriveDialog(driveItem: DriveItem) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_drive, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_drive, null)
         val topicEditText = dialogView.findViewById<EditText>(R.id.etDriveTopic)
         val ivSelectedImagePreview = dialogView.findViewById<ImageView>(R.id.ivSelectedImagePreview)
 
@@ -150,17 +162,29 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
             .setPositiveButton("Update") { dialog, _ ->
                 val updatedTopic = topicEditText.text.toString().trim()
                 if (updatedTopic.isNotEmpty()) {
-                    val updatedDriveItem = driveItem.copy(topic = updatedTopic, imageUrl = imageUri.toString())
-                    databaseReference.child("users").child(currentUserUsername).child("drive").child(driveItem.id).setValue(updatedDriveItem)
-                    Toast.makeText(requireContext(), "Drive item updated successfully", Toast.LENGTH_SHORT).show()
+                    val updatedDriveItem =
+                        driveItem.copy(topic = updatedTopic, imageUrl = imageUri.toString())
+                    databaseReference.child("users").child(currentUserUsername).child("drive")
+                        .child(driveItem.id).setValue(updatedDriveItem)
+                    Toast.makeText(
+                        requireContext(),
+                        "Drive item updated successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter topic", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Please enter topic", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 dialog.dismiss()
             }
             .setNegativeButton("Delete") { dialog, _ ->
-                databaseReference.child("users").child(currentUserUsername).child("drive").child(driveItem.id).removeValue()
-                Toast.makeText(requireContext(), "Drive item deleted successfully", Toast.LENGTH_SHORT).show()
+                databaseReference.child("users").child(currentUserUsername).child("drive")
+                    .child(driveItem.id).removeValue()
+                Toast.makeText(
+                    requireContext(),
+                    "Drive item deleted successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
                 dialog.dismiss()
             }
             .setNeutralButton("Cancel") { dialog, _ ->
@@ -173,22 +197,17 @@ class DriveFragment : Fragment(), DriveAdapter.OnItemClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             data?.data?.let { imageUri ->
-                // Przechowujemy wybrany obraz w zmiennej klasy
                 this.imageUri = imageUri
-                // Wyświetlamy podgląd obrazu w dialogu
                 showAddDriveDialog(imageUri)
             }
         }
     }
 
     override fun onItemClick(driveItem: DriveItem) {
-        // Obsługa kliknięcia na element listy
-        showEditDriveDialog(driveItem)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Rejestrujemy fragment jako odbiorcę rezultatów dla akcji wyboru obrazu
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             onActivityResult(PICK_IMAGE_REQUEST, result.resultCode, result.data)
         }

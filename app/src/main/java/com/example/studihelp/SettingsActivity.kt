@@ -18,22 +18,19 @@ class SettingsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
-        // Rejestracja słuchacza zmian preferencji
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(this)
 
-        // Pobranie aktualnej wartości trybu ciemnego
+
         val isDarkMode = PreferenceManager.getDefaultSharedPreferences(this)
             .getBoolean("dark_mode", false)
 
-        // Ustawienie trybu na podstawie wcześniej zapisanej preferencji
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
-        // Fragment domyślnie ustawiony na nagłówek
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -45,7 +42,6 @@ class SettingsActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
 
-        // Wyrejestrowanie słuchacza zmian preferencji
         PreferenceManager.getDefaultSharedPreferences(this)
             .unregisterOnSharedPreferenceChangeListener(this)
     }

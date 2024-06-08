@@ -4,14 +4,15 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editHealthTypeEditText"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/healthTypeEditButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter type of health entry"
-        android:inputType="text"
-        android:layout_marginTop="8dp"
-        />
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
+        android:text="Select type"
+        android:onClick="showTypeSelectionDialog" />
+
 
     <EditText
         android:id="@+id/editHealthDurationEditText"
@@ -19,7 +20,7 @@
         android:layout_height="wrap_content"
         android:hint="Enter duration"
         android:inputType="text"
-        android:layout_below="@id/editHealthTypeEditText"
+        android:layout_below="@id/healthTypeEditButton"
         android:layout_marginTop="8dp"
         />
 
@@ -28,6 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Date"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:layout_below="@id/editHealthDurationEditText"
         android:layout_marginTop="8dp"/>
 

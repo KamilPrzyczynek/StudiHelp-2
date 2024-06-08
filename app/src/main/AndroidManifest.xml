@@ -32,7 +32,7 @@
             android:directBootAware="true" />
 
         <activity
-            android:name=".ui.Timetable.Timetable"
+            android:name=".ui.Timetable.TimetableFragment"
             android:exported="false"
             android:label="@string/title_activity_timetable"
             android:theme="@style/Theme.StudiHelp.NoActionBar" />

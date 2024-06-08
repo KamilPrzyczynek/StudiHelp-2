@@ -7,7 +7,7 @@ data class TimetableItem(
     val startTime: String = "",
     val endTime: String = "",
     val dayOfWeek: String = "",
-    val color: String = "", // Add color field to store the selected color
+    val color: String = "",
     val isHeader: Boolean = false
 ) {
     constructor() : this("", "", "", "", "", "", "")

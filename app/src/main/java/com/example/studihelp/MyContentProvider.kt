@@ -21,7 +21,6 @@ class MyContentProvider : ContentProvider() {
     }
 
     override fun onCreate(): Boolean {
-        // Inicjalizacja dostawcy treści
         return true
     }
 
@@ -32,27 +31,22 @@ class MyContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        // Implementacja zapytań do bazy danych
         return null
     }
 
     override fun getType(uri: Uri): String? {
-        // Implementacja określenia MIME type
         return null
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        // Implementacja wstawiania nowych danych
         return null
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        // Implementacja usuwania danych
         return 0
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
-        // Implementacja aktualizacji danych
         return 0
     }
 }

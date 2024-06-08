@@ -57,18 +57,18 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
     private fun showAddHealthDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_healty, null)
-        val typeEditText = dialogView.findViewById<EditText>(R.id.healthTypeEditText)
+        val typeButton = dialogView.findViewById<Button>(R.id.healthTypeButton)
         val durationEditText = dialogView.findViewById<EditText>(R.id.healthDurationEditText)
-        val dateButton = dialogView.findViewById<Button>(R.id.healthDateButton) // Znajdź przycisk
+        val dateButton = dialogView.findViewById<Button>(R.id.healthDateButton)
         val notesEditText = dialogView.findViewById<EditText>(R.id.healthNotesEditText)
 
         val builder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Add Health Entry")
             .setPositiveButton("Add") { dialog, _ ->
-                val type = typeEditText.text.toString().trim()
+                val type = typeButton.text.toString().trim()
                 val duration = durationEditText.text.toString().trim()
-                val date = dateButton.text.toString().trim() // Pobierz wybraną datę z tekstu przycisku
+                val date = dateButton.text.toString().trim()
                 val notes = notesEditText.text.toString().trim()
 
                 if (type.isNotEmpty() && duration.isNotEmpty() && date.isNotEmpty()) {
@@ -82,16 +82,37 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                 dialog.dismiss()
             }
 
+        val typeOptions = arrayOf("BiePacing", "Interval Training", "Hill Repeats", "Fartlek Training", "Long Slow Distance (LSD) Running", "High-Intensity Interval Training (HIIT)", "Strength Training", "Other")
+
+        val typeSelectionDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Select Type")
+            .setItems(typeOptions) { dialog, which ->
+                typeButton.text = typeOptions[which]
+            }
+            .create()
+
+        typeButton.setOnClickListener {
+            typeSelectionDialog.show()
+        }
+
         val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
             val selectedDate = "$year-${month + 1}-$day"
-            dateButton.text = selectedDate // Ustaw wybraną datę w tekście przycisku
+            dateButton.text = selectedDate
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 
         dateButton.setOnClickListener {
-            datePickerDialog.show() // Pokaż dialog wyboru daty po kliknięciu przycisku
+            datePickerDialog.show()
         }
 
         builder.create().show()
+    }
+    private fun showTypeSelectionDialog(typeOptions: Array<String>, typeButton: Button) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Type")
+            .setItems(typeOptions) { _, which ->
+                typeButton.text = typeOptions[which]
+            }
+            .show()
     }
 
 
@@ -131,7 +152,6 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                     val date = entrySnapshot.child("date").getValue(String::class.java)
                     val notes = entrySnapshot.child("notes").getValue(String::class.java)
 
-                    // Sprawdzenie, czy wszystkie dane są dostępne
                     if (!type.isNullOrEmpty() && !duration.isNullOrEmpty() && !date.isNullOrEmpty() && !notes.isNullOrEmpty()) {
                         val healthEntry = HealthEntry(entrySnapshot.key!!, type, duration, date, notes)
                         healthEntries.add(healthEntry)
@@ -163,23 +183,23 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
     private fun showEditHealthDialog(healthEntry: HealthEntry) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_healty, null)
-        val typeEditText = dialogView.findViewById<EditText>(R.id.editHealthTypeEditText)
+        val typeButton = dialogView.findViewById<Button>(R.id.healthTypeEditButton)
         val durationEditText = dialogView.findViewById<EditText>(R.id.editHealthDurationEditText)
-        val dateButton = dialogView.findViewById<Button>(R.id.editHealthDateButton) // Znajdź przycisk
+        val dateButton = dialogView.findViewById<Button>(R.id.editHealthDateButton)
         val notesEditText = dialogView.findViewById<EditText>(R.id.editHealthNotesEditText)
 
-        typeEditText.setText(healthEntry.type)
+        typeButton.text = healthEntry.type
         durationEditText.setText(healthEntry.duration)
-        dateButton.text = healthEntry.date // Ustaw wybraną datę w tekście przycisku
+        dateButton.text = healthEntry.date
         notesEditText.setText(healthEntry.notes)
 
         val builder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Edit Health Entry")
             .setPositiveButton("Save") { dialog, _ ->
-                val type = typeEditText.text.toString().trim()
+                val type = typeButton.text.toString().trim()
                 val duration = durationEditText.text.toString().trim()
-                val date = dateButton.text.toString().trim() // Pobierz wybraną datę z tekstu przycisku
+                val date = dateButton.text.toString().trim()
                 val notes = notesEditText.text.toString().trim()
 
                 if (type.isNotEmpty() && duration.isNotEmpty() && date.isNotEmpty()) {
@@ -193,13 +213,26 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                 dialog.dismiss()
             }
 
+        val typeOptions = arrayOf("BiePacing", "Interval Training", "Hill Repeats", "Fartlek Training", "Long Slow Distance (LSD) Running", "High-Intensity Interval Training (HIIT)", "Strength Training", "Other")
+
+        val typeSelectionDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Select Type")
+            .setItems(typeOptions) { dialog, which ->
+                typeButton.text = typeOptions[which]
+            }
+            .create()
+
+        typeButton.setOnClickListener {
+            typeSelectionDialog.show()
+        }
+
         val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
             val selectedDate = "$year-${month + 1}-$day"
-            dateButton.text = selectedDate // Ustaw wybraną datę w tekście przycisku
+            dateButton.text = selectedDate
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 
         dateButton.setOnClickListener {
-            datePickerDialog.show() // Pokaż dialog wyboru daty po kliknięciu przycisku
+            datePickerDialog.show()
         }
 
         builder.create().show()

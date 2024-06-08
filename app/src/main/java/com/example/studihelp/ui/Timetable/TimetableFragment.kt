@@ -42,7 +42,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         val view = inflater.inflate(R.layout.fragment_timetable2, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerViewtimetable)
-        val gridLayoutManager = GridLayoutManager(requireContext(), 7) // 7 columns for days of the week
+        val gridLayoutManager = GridLayoutManager(requireContext(), 10)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (timetableAdapter.getItemViewType(position) == TimetableAdapter.VIEW_TYPE_HEADER) 7 else 1
@@ -78,14 +78,13 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
                         daysOfWeek.add(it.dayOfWeek)
                     }
                 }
-                // Sort days of week alphabetically
+
                 val sortedDaysOfWeek = daysOfWeek.sorted()
-                // Generate items to display, including headers for each day
                 val combinedList = mutableListOf<TimetableItem>()
                 sortedDaysOfWeek.forEach { day ->
                     val itemsForDay = timetableList.filter { it.dayOfWeek == day }
-                    val sortedItemsForDay = itemsForDay.sortedBy { timeToMinutes(it.startTime) } // Sort items by start time
-                    combinedList.add(TimetableItem(dayOfWeek = day, isHeader = true)) // Add header
+                    val sortedItemsForDay = itemsForDay.sortedBy { timeToMinutes(it.startTime) }
+                    combinedList.add(TimetableItem(dayOfWeek = day, isHeader = true))
                     combinedList.addAll(sortedItemsForDay)
                 }
                 timetableAdapter.submitList(combinedList)
@@ -108,7 +107,6 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             .setView(dialogView)
             .setTitle("Add Timetable Item")
             .setPositiveButton("Add") { dialog, _ ->
-                // This will be overridden below to ensure fields are filled
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -132,15 +130,14 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
             val color = colorButton.text.toString()
 
             if (name.isEmpty() || room.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || dayOfWeek.isEmpty() || color.isEmpty()) {
-                // Show error message if any field is empty
+
                 Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                // All fields are filled, proceed with adding timetable item
                 val username = sharedPreferences.getString("username", null)
                 val taskRef = database.child("users").child(username!!).child("Timetable").push()
                 val timetableItem = TimetableItem(taskRef.key!!, name, room, startTime, endTime, dayOfWeek, color)
                 taskRef.setValue(timetableItem)
-                alertDialog.dismiss() // Dismiss dialog only if all fields are filled
+                alertDialog.dismiss()
             }
         }
 

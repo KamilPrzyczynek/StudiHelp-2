@@ -171,7 +171,6 @@ class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
         Log.d("HomeFragment", "Calculated lesson date: ${lessonDate.time}")
 
-        // If the lesson time has already passed for today, move to next week
         if (lessonDate.before(currentDate)) {
             lessonDate.add(Calendar.WEEK_OF_YEAR, 1)
             Log.d("HomeFragment", "Lesson moved to next week: ${lessonDate.time}")

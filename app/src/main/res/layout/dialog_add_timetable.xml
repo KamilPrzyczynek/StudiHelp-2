@@ -20,23 +20,31 @@
         android:id="@+id/startTimeButtonTimetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:text="Select Start Time" />
 
     <Button
         android:id="@+id/endTimeButtonTimetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:text="Select End Time" />
 
     <Button
         android:id="@+id/dayOfWeekButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:text="Select Day of Week" />
 
     <Button
         android:id="@+id/colorButton"
         android:layout_width="match_parent"
+        style="@style/DarkModeButtonStyle"
+        android:background="@drawable/button_background"
         android:layout_height="wrap_content"
         android:text="Select Color" />
 

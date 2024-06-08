@@ -6,21 +6,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
 import com.example.studihelp.databinding.ActivityMain2Binding
 import com.example.studihelp.ui.login.EditProfilActivity
 import com.example.studihelp.ui.login.LoginActivity
-import com.example.studihelp.SettingsActivity
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity2 : AppCompatActivity() {
 
@@ -49,13 +46,20 @@ class MainActivity2 : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow ,R.id.nav_timetable,R.id.nav_expenditure,R.id.nav_aboutus
-                ,R.id.nav_task ,R.id.nav_drive
+                R.id.nav_home,
+                R.id.nav_gallery,
+                R.id.nav_slideshow,
+                R.id.nav_timetable,
+                R.id.nav_expenditure,
+                R.id.nav_aboutus,
+                R.id.nav_task,
+                R.id.nav_drive
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
@@ -63,17 +67,20 @@ class MainActivity2 : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+
             R.id.action_editaccount -> {
 
                 val intent = Intent(this, EditProfilActivity::class.java)
                 startActivity(intent)
                 return true
             }
+
             R.id.action_logout -> {
 
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "You have been logged out. See you later", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You have been logged out. See you later", Toast.LENGTH_SHORT)
+                    .show()
                 return true
             }
 

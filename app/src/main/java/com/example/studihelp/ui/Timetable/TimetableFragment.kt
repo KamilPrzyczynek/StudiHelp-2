@@ -7,13 +7,13 @@ import android.content.SharedPreferences
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
@@ -52,7 +52,8 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         timetableAdapter = TimetableAdapter(this)
         recyclerView.adapter = timetableAdapter
 
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         database = FirebaseDatabase.getInstance().reference
 
         fetchDataFromFirebase()
@@ -64,6 +65,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
 
         return view
     }
+
     private fun fetchDataFromFirebase() {
         val username = sharedPreferences.getString("username", null)
         val taskRef = database.child("users").child(username!!).child("Timetable")
@@ -97,12 +99,9 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     }
 
 
-
-
-
-
     private fun showAddTimetableDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_timetable, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_timetable, null)
         val builder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Add Timetable Item")
@@ -131,11 +130,13 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
 
             if (name.isEmpty() || room.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || dayOfWeek.isEmpty() || color.isEmpty()) {
 
-                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 val username = sharedPreferences.getString("username", null)
                 val taskRef = database.child("users").child(username!!).child("Timetable").push()
-                val timetableItem = TimetableItem(taskRef.key!!, name, room, startTime, endTime, dayOfWeek, color)
+                val timetableItem =
+                    TimetableItem(taskRef.key!!, name, room, startTime, endTime, dayOfWeek, color)
                 taskRef.setValue(timetableItem)
                 alertDialog.dismiss()
             }
@@ -163,7 +164,8 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     }
 
     private fun showDayPickerDialog(dayOfWeekButton: Button) {
-        val daysOfWeek = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        val daysOfWeek =
+            arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
         val dayPickerDialog = AlertDialog.Builder(requireContext())
             .setTitle("Select Day of Week")
@@ -210,7 +212,6 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     }
 
 
-
     private fun showEditDeleteDialog(item: TimetableItem) {
         val options = arrayOf("Edit", "Delete")
         AlertDialog.Builder(requireContext())
@@ -226,7 +227,8 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
     }
 
     private fun showEditDialog(item: TimetableItem) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_timetable, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_timetable, null)
         val nameEditText = dialogView.findViewById<EditText>(R.id.nameEditTextTimetableEdit)
         val roomEditText = dialogView.findViewById<EditText>(R.id.roomEditTextTimetableEdit)
         val startTimeButton = dialogView.findViewById<Button>(R.id.startTimeButtonTimetableEdit)
@@ -250,7 +252,15 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
                 val startTime = startTimeButton.text.toString()
                 val endTime = endTimeButton.text.toString()
 
-                val updatedItem = TimetableItem(item.id, name, room, startTime, endTime, dayOfWeekButtonEdit.text.toString(), colorButtonEdit.text.toString())
+                val updatedItem = TimetableItem(
+                    item.id,
+                    name,
+                    room,
+                    startTime,
+                    endTime,
+                    dayOfWeekButtonEdit.text.toString(),
+                    colorButtonEdit.text.toString()
+                )
                 updateTimetableItem(updatedItem)
 
                 dialog.dismiss()
@@ -290,6 +300,7 @@ class TimetableFragment : Fragment(), TimetableAdapter.OnItemClickListener {
         val taskRef = database.child("users").child(username!!).child("Timetable").child(item.id)
         taskRef.setValue(item)
     }
+
     private fun timeToMinutes(time: String): Int {
         val parts = time.split(":").map { it.toInt() }
         return parts[0] * 60 + parts[1]

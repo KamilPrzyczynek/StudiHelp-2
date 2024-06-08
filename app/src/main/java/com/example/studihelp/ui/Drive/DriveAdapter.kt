@@ -9,11 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
-import com.example.studihelp.ui.expenses.ExpensesFragment
 import com.squareup.picasso.Picasso
 
 
-class DriveAdapter(private val context: Context, private val listener: OnItemClickListener) : RecyclerView.Adapter<DriveAdapter.DriveViewHolder>() {
+class DriveAdapter(private val context: Context, private val listener: OnItemClickListener) :
+    RecyclerView.Adapter<DriveAdapter.DriveViewHolder>() {
 
     private var driveItems: List<DriveItem> = emptyList()
 
@@ -49,7 +49,8 @@ class DriveAdapter(private val context: Context, private val listener: OnItemCli
 
     override fun getItemCount() = driveItems.size
 
-    inner class DriveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class DriveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val textViewTopic: TextView = itemView.findViewById(R.id.tvDriveTopic)
         val imageView: ImageView = itemView.findViewById(R.id.ivDriveImage)
 

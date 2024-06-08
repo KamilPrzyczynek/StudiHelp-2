@@ -10,19 +10,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.studihelp.R
 import com.example.studihelp.databinding.FragmentHomeBinding
 import com.example.studihelp.ui.Task.Task
 import com.example.studihelp.ui.Task.TaskAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
@@ -47,7 +51,8 @@ class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance().reference
 
@@ -78,11 +83,14 @@ class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
                     for (taskSnapshot in snapshot.children) {
                         val title = taskSnapshot.child("title").getValue(String::class.java)
-                        val description = taskSnapshot.child("description").getValue(String::class.java)
-                        val datetimeString = taskSnapshot.child("datetime").getValue(String::class.java)
+                        val description =
+                            taskSnapshot.child("description").getValue(String::class.java)
+                        val datetimeString =
+                            taskSnapshot.child("datetime").getValue(String::class.java)
 
                         if (!datetimeString.isNullOrEmpty()) {
-                            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                            val dateFormat =
+                                SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                             val datetime = dateFormat.parse(datetimeString)
 
                             if (datetime != null && datetime.after(currentDate)) {
@@ -129,19 +137,31 @@ class HomeFragment : Fragment(), TaskAdapter.OnTaskClickListener {
                     val startTime = lessonSnapshot.child("startTime").getValue(String::class.java)
                     val endTime = lessonSnapshot.child("endTime").getValue(String::class.java)
 
-                    Log.d("HomeFragment", "Checking lesson: $lessonName on day $dayOfWeek at $startTime")
+                    Log.d(
+                        "HomeFragment",
+                        "Checking lesson: $lessonName on day $dayOfWeek at $startTime"
+                    )
 
                     if (lessonName != null && room != null && dayOfWeek != null && startTime != null && endTime != null) {
                         val lessonDate = getNextLessonDate(currentDate, dayOfWeek, startTime)
 
-                        Log.d("HomeFragment", "Parsed lesson date: ${dateFormat.format(lessonDate)}")
+                        Log.d(
+                            "HomeFragment",
+                            "Parsed lesson date: ${dateFormat.format(lessonDate)}"
+                        )
 
-                        if (lessonDate != null && (nextLessonDate == null || lessonDate.before(nextLessonDate))) {
+                        if (lessonDate != null && (nextLessonDate == null || lessonDate.before(
+                                nextLessonDate
+                            ))
+                        ) {
                             nextLessonDate = lessonDate
                             nextLesson = "$lessonName at $startTime-$endTime in room $room"
                         }
                     } else {
-                        Log.w("HomeFragment", "Incomplete lesson data: name=$lessonName, room=$room, dayOfWeek=$dayOfWeek, startTime=$startTime, endTime=$endTime")
+                        Log.w(
+                            "HomeFragment",
+                            "Incomplete lesson data: name=$lessonName, room=$room, dayOfWeek=$dayOfWeek, startTime=$startTime, endTime=$endTime"
+                        )
                     }
                 }
 

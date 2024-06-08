@@ -13,7 +13,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:background="@drawable/text_borderhome"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp" />
 
     <ImageView
         android:id="@+id/ivDriveImage"
@@ -21,6 +21,6 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
 
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
 </LinearLayout>

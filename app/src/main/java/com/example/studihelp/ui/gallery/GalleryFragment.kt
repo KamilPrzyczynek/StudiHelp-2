@@ -56,7 +56,8 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
     }
 
     private fun showAddHealthDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_healty, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_healty, null)
         val typeButton = dialogView.findViewById<Button>(R.id.healthTypeButton)
         val durationEditText = dialogView.findViewById<EditText>(R.id.healthDurationEditText)
         val dateButton = dialogView.findViewById<Button>(R.id.healthDateButton)
@@ -75,14 +76,27 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                     addHealthEntryToDatabase(type, duration, date, notes)
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter type, duration, and date", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter type, duration, and date",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
 
-        val typeOptions = arrayOf("BiePacing", "Interval Training", "Hill Repeats", "Fartlek Training", "Long Slow Distance (LSD) Running", "High-Intensity Interval Training (HIIT)", "Strength Training", "Other")
+        val typeOptions = arrayOf(
+            "BiePacing",
+            "Interval Training",
+            "Hill Repeats",
+            "Fartlek Training",
+            "Long Slow Distance (LSD) Running",
+            "High-Intensity Interval Training (HIIT)",
+            "Strength Training",
+            "Other"
+        )
 
         val typeSelectionDialog = AlertDialog.Builder(requireContext())
             .setTitle("Select Type")
@@ -95,10 +109,16 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             typeSelectionDialog.show()
         }
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
-            val selectedDate = "$year-${month + 1}-$day"
-            dateButton.text = selectedDate
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, day ->
+                val selectedDate = "$year-${month + 1}-$day"
+                dateButton.text = selectedDate
+            },
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
 
         dateButton.setOnClickListener {
             datePickerDialog.show()
@@ -106,6 +126,7 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
         builder.create().show()
     }
+
     private fun showTypeSelectionDialog(typeOptions: Array<String>, typeButton: Button) {
         AlertDialog.Builder(requireContext())
             .setTitle("Select Type")
@@ -116,9 +137,14 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
     }
 
 
-
-    private fun addHealthEntryToDatabase(type: String, duration: String, date: String, notes: String) {
-        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getString("username", null)
+    private fun addHealthEntryToDatabase(
+        type: String,
+        duration: String,
+        date: String,
+        notes: String
+    ) {
+        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+            .getString("username", null)
 
         val healthEntryRef = database.child("users").child(username!!).child("healthEntries").push()
 
@@ -131,15 +157,21 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
         healthEntryRef.setValue(healthEntry)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Health entry added successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Health entry added successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Failed to add health entry", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Failed to add health entry", Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 
     private fun loadHealthEntries() {
-        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getString("username", null)
+        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+            .getString("username", null)
 
         val healthEntriesRef = database.child("users").child(username!!).child("healthEntries")
 
@@ -153,7 +185,8 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                     val notes = entrySnapshot.child("notes").getValue(String::class.java)
 
                     if (!type.isNullOrEmpty() && !duration.isNullOrEmpty() && !date.isNullOrEmpty() && !notes.isNullOrEmpty()) {
-                        val healthEntry = HealthEntry(entrySnapshot.key!!, type, duration, date, notes)
+                        val healthEntry =
+                            HealthEntry(entrySnapshot.key!!, type, duration, date, notes)
                         healthEntries.add(healthEntry)
                     }
                 }
@@ -162,7 +195,11 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(), "Failed to load health entries", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to load health entries",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -182,7 +219,8 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
     }
 
     private fun showEditHealthDialog(healthEntry: HealthEntry) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_healty, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_healty, null)
         val typeButton = dialogView.findViewById<Button>(R.id.healthTypeEditButton)
         val durationEditText = dialogView.findViewById<EditText>(R.id.editHealthDurationEditText)
         val dateButton = dialogView.findViewById<Button>(R.id.editHealthDateButton)
@@ -206,14 +244,27 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
                     updateHealthEntryInDatabase(healthEntry, type, duration, date, notes)
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter type, duration, and date", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter type, duration, and date",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
 
-        val typeOptions = arrayOf("BiePacing", "Interval Training", "Hill Repeats", "Fartlek Training", "Long Slow Distance (LSD) Running", "High-Intensity Interval Training (HIIT)", "Strength Training", "Other")
+        val typeOptions = arrayOf(
+            "BiePacing",
+            "Interval Training",
+            "Hill Repeats",
+            "Fartlek Training",
+            "Long Slow Distance (LSD) Running",
+            "High-Intensity Interval Training (HIIT)",
+            "Strength Training",
+            "Other"
+        )
 
         val typeSelectionDialog = AlertDialog.Builder(requireContext())
             .setTitle("Select Type")
@@ -226,10 +277,16 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
             typeSelectionDialog.show()
         }
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
-            val selectedDate = "$year-${month + 1}-$day"
-            dateButton.text = selectedDate
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, day ->
+                val selectedDate = "$year-${month + 1}-$day"
+                dateButton.text = selectedDate
+            },
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
 
         dateButton.setOnClickListener {
             datePickerDialog.show()
@@ -245,9 +302,11 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
         date: String,
         notes: String
     ) {
-        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getString("username", null)
+        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+            .getString("username", null)
 
-        val healthEntryRef = database.child("users").child(username!!).child("healthEntries").child(healthEntry.id)
+        val healthEntryRef =
+            database.child("users").child(username!!).child("healthEntries").child(healthEntry.id)
 
         val updatedHealthEntry = mapOf(
             "type" to type,
@@ -258,24 +317,42 @@ class GalleryFragment : Fragment(), OnHealthEntryClickListener {
 
         healthEntryRef.updateChildren(updatedHealthEntry)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Health entry updated successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Health entry updated successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Failed to update health entry", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to update health entry",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
     private fun deleteHealthEntry(healthEntry: HealthEntry) {
-        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getString("username", null)
+        val username = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+            .getString("username", null)
 
-        val healthEntryRef = database.child("users").child(username!!).child("healthEntries").child(healthEntry.id)
+        val healthEntryRef =
+            database.child("users").child(username!!).child("healthEntries").child(healthEntry.id)
 
         healthEntryRef.removeValue()
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Health entry deleted successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Health entry deleted successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Failed to delete health entry", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to delete health entry",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 

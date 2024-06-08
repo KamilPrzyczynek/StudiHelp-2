@@ -19,7 +19,8 @@ class TaskAdapter(
         fun onTaskClick(task: Task)
     }
 
-    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         private val titleTextView: TextView = itemView.findViewById(R.id.tvTitle)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
         private val dateTextView: TextView = itemView.findViewById(R.id.tvDate)

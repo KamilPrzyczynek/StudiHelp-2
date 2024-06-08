@@ -15,10 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.studihelp.R
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -40,7 +37,8 @@ class ExpensesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_expenses, container, false)
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         expensesRecyclerView = view.findViewById(R.id.expensesRecyclerView)
         totalExpensesTextView = view.findViewById(R.id.totalExpensesTextView)
         expensesAdapter = ExpensesAdapter { expense -> showEditDeleteExpenseDialog(expense) }
@@ -80,7 +78,8 @@ class ExpensesFragment : Fragment() {
 
                     for (expenseSnapshot in snapshot.children) {
                         val expenseName = expenseSnapshot.child("name").getValue(String::class.java)
-                        val expenseAmount = expenseSnapshot.child("amount").getValue(Double::class.java) ?: 0.0
+                        val expenseAmount =
+                            expenseSnapshot.child("amount").getValue(Double::class.java) ?: 0.0
                         expenseName?.let {
                             val expense = Expense(it, expenseAmount)
                             expenseList.add(expense)
@@ -123,11 +122,16 @@ class ExpensesFragment : Fragment() {
             .setTitle("Add New Expense")
             .setPositiveButton("Add") { _, _ ->
                 val expenseName = editTextExpenseName.text.toString().trim()
-                val expenseAmount = editTextExpenseAmount.text.toString().trim().toDoubleOrNull() ?: 0.0
+                val expenseAmount =
+                    editTextExpenseAmount.text.toString().trim().toDoubleOrNull() ?: 0.0
                 if (expenseName.isNotEmpty() && expenseAmount > 0.0) {
                     saveExpenseToDatabase(expenseName, expenseAmount)
                 } else {
-                    Toast.makeText(requireContext(), "Please enter valid expense details", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter valid expense details",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -153,7 +157,8 @@ class ExpensesFragment : Fragment() {
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "Failed to add expense to the database: $expenseName", e)
-                    Toast.makeText(requireContext(), "Failed to add expense.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to add expense.", Toast.LENGTH_SHORT)
+                        .show()
                 }
         } else {
             Log.e(TAG, "Current user username is null")
@@ -173,11 +178,16 @@ class ExpensesFragment : Fragment() {
             .setTitle("Edit or Delete Expense")
             .setPositiveButton("Update") { _, _ ->
                 val expenseName = editTextExpenseName.text.toString().trim()
-                val expenseAmount = editTextExpenseAmount.text.toString().trim().toDoubleOrNull() ?: 0.0
+                val expenseAmount =
+                    editTextExpenseAmount.text.toString().trim().toDoubleOrNull() ?: 0.0
                 if (expenseName.isNotEmpty() && expenseAmount > 0.0) {
                     updateExpenseInDatabase(expense, expenseName, expenseAmount)
                 } else {
-                    Toast.makeText(requireContext(), "Please enter valid expense details", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter valid expense details",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Delete") { _, _ ->
@@ -196,8 +206,9 @@ class ExpensesFragment : Fragment() {
         val currentUserUsername = sharedPreferences.getString("username", "")
 
         if (!currentUserUsername.isNullOrEmpty()) {
-            val expenseQuery = databaseReference.child("users").child(currentUserUsername).child("expenses")
-                .orderByChild("name").equalTo(expense.name)
+            val expenseQuery =
+                databaseReference.child("users").child(currentUserUsername).child("expenses")
+                    .orderByChild("name").equalTo(expense.name)
             expenseQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (expenseSnapshot in snapshot.children) {
@@ -209,8 +220,16 @@ class ExpensesFragment : Fragment() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "Failed to update expense in the database: $newName", error.toException())
-                    Toast.makeText(requireContext(), "Failed to update expense.", Toast.LENGTH_SHORT).show()
+                    Log.e(
+                        TAG,
+                        "Failed to update expense in the database: $newName",
+                        error.toException()
+                    )
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to update expense.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         } else {
@@ -223,8 +242,9 @@ class ExpensesFragment : Fragment() {
         val currentUserUsername = sharedPreferences.getString("username", "")
 
         if (!currentUserUsername.isNullOrEmpty()) {
-            val expenseQuery = databaseReference.child("users").child(currentUserUsername).child("expenses")
-                .orderByChild("name").equalTo(expense.name)
+            val expenseQuery =
+                databaseReference.child("users").child(currentUserUsername).child("expenses")
+                    .orderByChild("name").equalTo(expense.name)
             expenseQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (expenseSnapshot in snapshot.children) {
@@ -235,8 +255,16 @@ class ExpensesFragment : Fragment() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "Failed to delete expense from the database: ${expense.name}", error.toException())
-                    Toast.makeText(requireContext(), "Failed to delete expense.", Toast.LENGTH_SHORT).show()
+                    Log.e(
+                        TAG,
+                        "Failed to delete expense from the database: ${expense.name}",
+                        error.toException()
+                    )
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to delete expense.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         } else {

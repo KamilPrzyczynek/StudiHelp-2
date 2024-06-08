@@ -1,11 +1,10 @@
 package com.example.studihelp.ui.AboutUs
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
@@ -30,7 +29,7 @@ class AboutUsFragment : Fragment() {
     private fun getSampleAboutUsInfoList(): List<AboutUsInfo> {
         return listOf(
             AboutUsInfo("Kamil Przyczynek", "Student", "Nr Albumu:36784"),
-            AboutUsInfo("Piotr Ludwa", "Student", "Nr albumu:36391") ,
+            AboutUsInfo("Piotr Ludwa", "Student", "Nr albumu:36391"),
             AboutUsInfo("Max Rudnik", "Student", "Nr albumu:36406")
         )
     }

@@ -6,7 +6,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
@@ -22,10 +20,16 @@ import com.example.studihelp.ui.Notification.NotificationHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
@@ -43,7 +47,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         val view = inflater.inflate(R.layout.fragment_task, container, false)
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance().reference
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
 
         recyclerView = view.findViewById(R.id.tasksRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -61,7 +66,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
     }
 
     private fun showAddTaskDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
         val dialogTitleEditText = dialogView.findViewById<EditText>(R.id.etTaskTitle)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.etTaskDescription)
         val dialogDateEditText = dialogView.findViewById<EditText>(R.id.etTaskDate)
@@ -70,12 +76,13 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         val timePickerButton = dialogView.findViewById<Button>(R.id.btnSelectTime)
 
         val calendar = Calendar.getInstance()
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, monthOfYear)
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateDateInView(dialogDateEditText, calendar)
-        }
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, monthOfYear)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                updateDateInView(dialogDateEditText, calendar)
+            }
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -84,13 +91,17 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         }
 
         datePickerButton.setOnClickListener {
-            DatePickerDialog(requireContext(), dateSetListener, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(), dateSetListener, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         timePickerButton.setOnClickListener {
-            TimePickerDialog(requireContext(), timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE), false).show()
+            TimePickerDialog(
+                requireContext(), timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), false
+            ).show()
         }
 
         val builder = AlertDialog.Builder(requireContext())
@@ -106,7 +117,11 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
                     addTaskToDatabase(title, description, date, time)
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter title, date, and time", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter title, date, and time",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -141,7 +156,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
         taskRef.setValue(task)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Task added successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Task added successfully", Toast.LENGTH_SHORT)
+                    .show()
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Failed to add task", Toast.LENGTH_SHORT).show()
@@ -159,7 +175,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
                     val tasks = mutableListOf<Task>()
                     for (taskSnapshot in snapshot.children) {
                         val title = taskSnapshot.child("title").getValue(String::class.java)
-                        val description = taskSnapshot.child("description").getValue(String::class.java)
+                        val description =
+                            taskSnapshot.child("description").getValue(String::class.java)
                         val datetime = taskSnapshot.child("datetime").getValue(String::class.java)
 
                         title?.let { t ->
@@ -174,21 +191,21 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
                     if (tasks.isEmpty()) {
                         val notificationHelper = NotificationHelper(requireContext())
-                        notificationHelper.createNotification("No tasks", "You don't have any tasks scheduled")
+                        notificationHelper.createNotification(
+                            "No tasks",
+                            "You don't have any tasks scheduled"
+                        )
                     } else {
                         adapter.setTasks(tasks)
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), "Failed to load tasks", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to load tasks", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
-
-
-
-
 
 
     override fun onTaskClick(task: Task) {
@@ -205,9 +222,11 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
     }
 
     private fun showEditTaskDialog(task: Task) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_task, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_task, null)
         val dialogTitleEditText = dialogView.findViewById<EditText>(R.id.etEditTaskTitle)
-        val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.etEditTaskDescription)
+        val dialogDescriptionEditText =
+            dialogView.findViewById<EditText>(R.id.etEditTaskDescription)
         val dialogDateEditText = dialogView.findViewById<EditText>(R.id.etEditTaskDate)
         val dialogTimeEditText = dialogView.findViewById<EditText>(R.id.etEditTaskTime)
         val datePickerButton = dialogView.findViewById<Button>(R.id.btnSelectEditDate)
@@ -222,12 +241,13 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         }
 
         val calendar = Calendar.getInstance()
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, monthOfYear)
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateDateInView(dialogDateEditText, calendar)
-        }
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, monthOfYear)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                updateDateInView(dialogDateEditText, calendar)
+            }
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -236,13 +256,17 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         }
 
         datePickerButton.setOnClickListener {
-            DatePickerDialog(requireContext(), dateSetListener, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(), dateSetListener, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         timePickerButton.setOnClickListener {
-            TimePickerDialog(requireContext(), timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE), false).show()
+            TimePickerDialog(
+                requireContext(), timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), false
+            ).show()
         }
 
         val builder = AlertDialog.Builder(requireContext())
@@ -258,7 +282,11 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
                     updateTaskInDatabase(task.id, title, description, date, time)
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter title, date, and time", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter title, date, and time",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -268,7 +296,13 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
         builder.create().show()
     }
 
-    private fun updateTaskInDatabase(taskId: String, title: String, description: String, date: String, time: String) {
+    private fun updateTaskInDatabase(
+        taskId: String,
+        title: String,
+        description: String,
+        date: String,
+        time: String
+    ) {
         val currentUserUid = auth.currentUser?.uid
         val username = sharedPreferences.getString("username", null)
         val taskRef = database.child("users").child(username!!).child("Task").child(taskId)
@@ -281,7 +315,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
         taskRef.updateChildren(task)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Task updated successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Task updated successfully", Toast.LENGTH_SHORT)
+                    .show()
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Failed to update task", Toast.LENGTH_SHORT).show()
@@ -295,7 +330,8 @@ class TasksFragment : Fragment(), TaskAdapter.OnTaskClickListener {
 
         taskRef.removeValue()
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Task deleted successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Task deleted successfully", Toast.LENGTH_SHORT)
+                    .show()
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Failed to delete task", Toast.LENGTH_SHORT).show()

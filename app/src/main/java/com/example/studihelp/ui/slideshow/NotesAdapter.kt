@@ -7,14 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
 import com.example.studihelp.ui.slideshow.Note
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class NotesAdapter(
     private val notes: List<Note>,
     private val listener: OnNoteClickListener
 ) : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         private val titleTextView: TextView = itemView.findViewById(R.id.textViewTitle)
         private val contentTextView: TextView = itemView.findViewById(R.id.textViewContent)
         private val timestampTextView: TextView = itemView.findViewById(R.id.textViewTimestamp)
@@ -48,7 +50,8 @@ class NotesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
         return ViewHolder(itemView)
     }
 

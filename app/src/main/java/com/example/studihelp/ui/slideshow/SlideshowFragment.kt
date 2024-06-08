@@ -10,16 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Switch
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studihelp.R
-import com.example.studihelp.databinding.FragmentSlideshowBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,7 +40,8 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        sharedPreferences = requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
         databaseReference = FirebaseDatabase.getInstance().reference
 
@@ -103,7 +100,8 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e(TAG, "Failed to read notes.", error.toException())
-                    Toast.makeText(requireContext(), "Failed to read notes.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to read notes.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
         }
@@ -172,21 +170,32 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
         dialog.show()
     }
 
-    private fun updateNoteInDatabase(note: Note, newTitle: String, newContent: String, newIsPinned: Boolean) {
+    private fun updateNoteInDatabase(
+        note: Note,
+        newTitle: String,
+        newContent: String,
+        newIsPinned: Boolean
+    ) {
         val currentUserUsername = sharedPreferences.getString("username", "")
 
         currentUserUsername?.let { username ->
-            val noteRef = databaseReference.child("users").child(username).child("notes").child(note.key)
+            val noteRef =
+                databaseReference.child("users").child(username).child("notes").child(note.key)
             noteRef.child("title").setValue(newTitle)
             noteRef.child("content").setValue(newContent)
             noteRef.child("isPinned").setValue(newIsPinned)
             noteRef.child("timestamp").setValue(System.currentTimeMillis())
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Note updated successfully.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Note updated successfully.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "Failed to update note.", e)
-                    Toast.makeText(requireContext(), "Failed to update note.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to update note.", Toast.LENGTH_SHORT)
+                        .show()
                 }
         }
         notesAdapter.notifyDataSetChanged()
@@ -197,14 +206,20 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
         val currentUserUsername = sharedPreferences.getString("username", "")
 
         currentUserUsername?.let { username ->
-            val noteRef = databaseReference.child("users").child(username).child("notes").child(note.key)
+            val noteRef =
+                databaseReference.child("users").child(username).child("notes").child(note.key)
             noteRef.removeValue()
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Note deleted successfully.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Note deleted successfully.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "Failed to delete note.", e)
-                    Toast.makeText(requireContext(), "Failed to delete note.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to delete note.", Toast.LENGTH_SHORT)
+                        .show()
                 }
         }
     }
@@ -228,7 +243,11 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
                     saveNoteToDatabase(title, content, isPinned)
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(requireContext(), "Please enter both title and content.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter both title and content.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -252,13 +271,16 @@ class SlideshowFragment : Fragment(), NotesAdapter.OnNoteClickListener {
             databaseReference.child("users").child(username).child("notes").push()
                 .setValue(noteData)
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Note added successfully.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Note added successfully.", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Failed to add note.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to add note.", Toast.LENGTH_SHORT)
+                        .show()
                 }
         }
     }
+
     private fun formatTimestamp(timestamp: Long): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
